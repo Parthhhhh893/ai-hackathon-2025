@@ -1,0 +1,53 @@
+import pytz
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import (
+    Column, Integer, String, Boolean, TIMESTAMP, Text, JSON, Enum as SQLAlchemyEnum, Float, func
+)
+from sqlalchemy.ext.hybrid import hybrid_property
+
+Base = declarative_base()
+
+
+class DefaultTimeStamp(Base):
+    """
+    Default time-stamped model with `created_at` and `updated_at`.
+    This is inherited by all other models to standardize timestamp handling.
+    """
+    __abstract__ = True  # This class will not create a table itself
+
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    updated_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now())
+
+    @hybrid_property
+    def created_at_ist(self):
+        """Return the created_at timestamp in IST."""
+        return self.convert_to_ist(self.created_at)
+
+    @hybrid_property
+    def updated_at_ist(self):
+        """Return the updated_at timestamp in IST."""
+        return self.convert_to_ist(self.updated_at)
+
+    def convert_to_ist(self, utc_dt):
+        """Convert UTC datetime to IST."""
+        if utc_dt.tzinfo is None:  # If naive datetime
+            utc_dt = pytz.utc.localize(utc_dt)
+        ist_zone = pytz.timezone('Asia/Kolkata')
+        return utc_dt.astimezone(ist_zone)
+
+
+class Rule(DefaultTimeStamp):
+    __tablename__ = "rules"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    rule_config = Column(JSON, nullable=True)
+    is_enabled = Column(Boolean, default=True)
+    default = Column(Boolean, default=False)
+
+class Business(DefaultTimeStamp):
+    __tablename__ = "business"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    rule_config = Column(JSON, nullable=True)
+    is_enabled = Column(Boolean, default=True)
+    default = Column(Boolean, default=False)
