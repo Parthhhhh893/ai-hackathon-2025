@@ -42,12 +42,23 @@ class Rule(DefaultTimeStamp):
     id = Column(Integer, primary_key=True, autoincrement=True)
     rule_config = Column(JSON, nullable=True)
     is_enabled = Column(Boolean, default=True)
-    default = Column(Boolean, default=False)
+    is_deleted = Column(Boolean, default=False)
 
 class Business(DefaultTimeStamp):
     __tablename__ = "business"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    rule_config = Column(JSON, nullable=True)
-    is_enabled = Column(Boolean, default=True)
-    default = Column(Boolean, default=False)
+    business_name = Column(String(255), nullable=False)
+    business_sector = Column(String(255), nullable=False)
+    risk_score = Column(String(255), nullable=False)
+    risk_response = Column(JSON, nullable=True)
+
+
+class DocumentData(DefaultTimeStamp):
+    __tablename__ = "document_data"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type = Column(String(255), nullable=False)
+    raw_response = Column(JSON, nullable=True)
+    business_id = Column(Integer)
+
