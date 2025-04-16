@@ -1,0 +1,571 @@
+{
+  "buyers": [
+    {
+      "buyer_id": "BUY1001",
+      "buyer_name": "Tech Solutions Inc.",
+      "industry": "Information Technology",
+      "years_in_business": 7,
+      "requested_credit_limit": 80000,
+      "requested_payment_terms": 45,
+      "financials": {
+        "2023": {
+          "income_statement": {
+            "revenue": 3250000,
+            "cost_of_goods_sold": 1950000,
+            "gross_profit": 1300000,
+            "operating_expenses": 950000,
+            "operating_income": 350000,
+            "interest_expense": 45000,
+            "income_before_tax": 305000,
+            "tax_expense": 91500,
+            "net_income": 213500
+          },
+          "balance_sheet": {
+            "assets": {
+              "current_assets": {
+                "cash": 280000,
+                "accounts_receivable": 420000,
+                "inventory": 350000,
+                "other_current_assets": 75000,
+                "total_current_assets": 1125000
+              },
+              "non_current_assets": {
+                "property_plant_equipment": 750000,
+                "intangible_assets": 200000,
+                "other_non_current_assets": 125000,
+                "total_non_current_assets": 1075000
+              },
+              "total_assets": 2200000
+            },
+            "liabilities": {
+              "current_liabilities": {
+                "accounts_payable": 320000,
+                "short_term_debt": 180000,
+                "other_current_liabilities": 190000,
+                "total_current_liabilities": 690000
+              },
+              "non_current_liabilities": {
+                "long_term_debt": 630000,
+                "other_non_current_liabilities": 80000,
+                "total_non_current_liabilities": 710000
+              },
+              "total_liabilities": 1400000
+            },
+            "equity": {
+              "common_stock": 500000,
+              "retained_earnings": 300000,
+              "total_equity": 800000
+            }
+          },
+          "cash_flow": {
+            "operating_activities": {
+              "net_income": 213500,
+              "depreciation_amortization": 95000,
+              "changes_in_working_capital": -75000,
+              "net_cash_from_operating": 233500
+            },
+            "investing_activities": {
+              "capital_expenditures": -120000,
+              "other_investing_activities": -30000,
+              "net_cash_from_investing": -150000
+            },
+            "financing_activities": {
+              "debt_repayment": -85000,
+              "dividends_paid": -40000,
+              "net_cash_from_financing": -125000
+            },
+            "net_change_in_cash": -41500
+          }
+        },
+        "2024": {
+          "income_statement": {
+            "revenue": 3750000,
+            "cost_of_goods_sold": 2175000,
+            "gross_profit": 1575000,
+            "operating_expenses": 1125000,
+            "operating_income": 450000,
+            "interest_expense": 62000,
+            "income_before_tax": 388000,
+            "tax_expense": 116400,
+            "net_income": 271600
+          },
+          "balance_sheet": {
+            "assets": {
+              "current_assets": {
+                "cash": 320000,
+                "accounts_receivable": 505000,
+                "inventory": 390000,
+                "other_current_assets": 85000,
+                "total_current_assets": 1300000
+              },
+              "non_current_assets": {
+                "property_plant_equipment": 890000,
+                "intangible_assets": 235000,
+                "other_non_current_assets": 175000,
+                "total_non_current_assets": 1300000
+              },
+              "total_assets": 2600000
+            },
+            "liabilities": {
+              "current_liabilities": {
+                "accounts_payable": 370000,
+                "short_term_debt": 210000,
+                "other_current_liabilities": 220000,
+                "total_current_liabilities": 800000
+              },
+              "non_current_liabilities": {
+                "long_term_debt": 750000,
+                "other_non_current_liabilities": 95000,
+                "total_non_current_liabilities": 845000
+              },
+              "total_liabilities": 1645000
+            },
+            "equity": {
+              "common_stock": 500000,
+              "retained_earnings": 455000,
+              "total_equity": 955000
+            }
+          },
+          "cash_flow": {
+            "operating_activities": {
+              "net_income": 271600,
+              "depreciation_amortization": 115000,
+              "changes_in_working_capital": -95000,
+              "net_cash_from_operating": 291600
+            },
+            "investing_activities": {
+              "capital_expenditures": -255000,
+              "other_investing_activities": -45000,
+              "net_cash_from_investing": -300000
+            },
+            "financing_activities": {
+              "debt_repayment": -120000,
+              "dividends_paid": -65000,
+              "net_cash_from_financing": -185000
+            },
+            "net_change_in_cash": -193400
+          }
+        }
+      },
+      "bank_statements": {
+        "monthly_balances": [
+          {"month": "Apr-2024", "ending_balance": 315000},
+          {"month": "Mar-2024", "ending_balance": 295000},
+          {"month": "Feb-2024", "ending_balance": 310000},
+          {"month": "Jan-2024", "ending_balance": 325000},
+          {"month": "Dec-2023", "ending_balance": 360000},
+          {"month": "Nov-2023", "ending_balance": 330000},
+          {"month": "Oct-2023", "ending_balance": 305000},
+          {"month": "Sep-2023", "ending_balance": 320000},
+          {"month": "Aug-2023", "ending_balance": 290000},
+          {"month": "Jul-2023", "ending_balance": 310000},
+          {"month": "Jun-2023", "ending_balance": 330000},
+          {"month": "May-2023", "ending_balance": 300000}
+        ],
+        "payment_patterns": {
+          "average_days_to_pay": 42,
+          "payment_delays_count": 3,
+          "maximum_delay_days": 15
+        },
+        "cashflow_stability": {
+          "variance": 425000000,
+          "trend": "Stable with seasonal variation"
+        }
+      },
+      "trade_references": [
+        {
+          "company": "Supplier A",
+          "relationship_years": 5,
+          "credit_limit": 50000,
+          "payment_terms": 30,
+          "payment_history": "Good, occasional delays"
+        },
+        {
+          "company": "Supplier B",
+          "relationship_years": 3,
+          "credit_limit": 75000,
+          "payment_terms": 45,
+          "payment_history": "Excellent, always on time"
+        }
+      ]
+    },
+    {
+      "buyer_id": "BUY1002",
+      "buyer_name": "Global Trade LLC",
+      "industry": "Wholesale Distribution",
+      "years_in_business": 12,
+      "requested_credit_limit": 150000,
+      "requested_payment_terms": 60,
+      "financials": {
+        "2023": {
+          "income_statement": {
+            "revenue": 8750000,
+            "cost_of_goods_sold": 6562500,
+            "gross_profit": 2187500,
+            "operating_expenses": 1750000,
+            "operating_income": 437500,
+            "interest_expense": 135000,
+            "income_before_tax": 302500,
+            "tax_expense": 90750,
+            "net_income": 211750
+          },
+          "balance_sheet": {
+            "assets": {
+              "current_assets": {
+                "cash": 575000,
+                "accounts_receivable": 1250000,
+                "inventory": 1750000,
+                "other_current_assets": 125000,
+                "total_current_assets": 3700000
+              },
+              "non_current_assets": {
+                "property_plant_equipment": 2250000,
+                "intangible_assets": 350000,
+                "other_non_current_assets": 200000,
+                "total_non_current_assets": 2800000
+              },
+              "total_assets": 6500000
+            },
+            "liabilities": {
+              "current_liabilities": {
+                "accounts_payable": 1050000,
+                "short_term_debt": 575000,
+                "other_current_liabilities": 375000,
+                "total_current_liabilities": 2000000
+              },
+              "non_current_liabilities": {
+                "long_term_debt": 2500000,
+                "other_non_current_liabilities": 300000,
+                "total_non_current_liabilities": 2800000
+              },
+              "total_liabilities": 4800000
+            },
+            "equity": {
+              "common_stock": 1000000,
+              "retained_earnings": 700000,
+              "total_equity": 1700000
+            }
+          },
+          "cash_flow": {
+            "operating_activities": {
+              "net_income": 211750,
+              "depreciation_amortization": 175000,
+              "changes_in_working_capital": -350000,
+              "net_cash_from_operating": 36750
+            },
+            "investing_activities": {
+              "capital_expenditures": -450000,
+              "other_investing_activities": -75000,
+              "net_cash_from_investing": -525000
+            },
+            "financing_activities": {
+              "debt_repayment": -225000,
+              "dividends_paid": -100000,
+              "net_cash_from_financing": -325000
+            },
+            "net_change_in_cash": -813250
+          }
+        },
+        "2024": {
+          "income_statement": {
+            "revenue": 9125000,
+            "cost_of_goods_sold": 6843750,
+            "gross_profit": 2281250,
+            "operating_expenses": 1825000,
+            "operating_income": 456250,
+            "interest_expense": 175000,
+            "income_before_tax": 281250,
+            "tax_expense": 84375,
+            "net_income": 196875
+          },
+          "balance_sheet": {
+            "assets": {
+              "current_assets": {
+                "cash": 425000,
+                "accounts_receivable": 1375000,
+                "inventory": 1950000,
+                "other_current_assets": 150000,
+                "total_current_assets": 3900000
+              },
+              "non_current_assets": {
+                "property_plant_equipment": 2650000,
+                "intangible_assets": 300000,
+                "other_non_current_assets": 250000,
+                "total_non_current_assets": 3200000
+              },
+              "total_assets": 7100000
+            },
+            "liabilities": {
+              "current_liabilities": {
+                "accounts_payable": 1150000,
+                "short_term_debt": 650000,
+                "other_current_liabilities": 425000,
+                "total_current_liabilities": 2225000
+              },
+              "non_current_liabilities": {
+                "long_term_debt": 3000000,
+                "other_non_current_liabilities": 325000,
+                "total_non_current_liabilities": 3325000
+              },
+              "total_liabilities": 5550000
+            },
+            "equity": {
+              "common_stock": 1000000,
+              "retained_earnings": 550000,
+              "total_equity": 1550000
+            }
+          },
+          "cash_flow": {
+            "operating_activities": {
+              "net_income": 196875,
+              "depreciation_amortization": 225000,
+              "changes_in_working_capital": -275000,
+              "net_cash_from_operating": 146875
+            },
+            "investing_activities": {
+              "capital_expenditures": -625000,
+              "other_investing_activities": -50000,
+              "net_cash_from_investing": -675000
+            },
+            "financing_activities": {
+              "debt_repayment": -350000,
+              "dividends_paid": -75000,
+              "net_cash_from_financing": -425000
+            },
+            "net_change_in_cash": -953125
+          }
+        }
+      },
+      "bank_statements": {
+        "monthly_balances": [
+          {"month": "Apr-2024", "ending_balance": 420000},
+          {"month": "Mar-2024", "ending_balance": 475000},
+          {"month": "Feb-2024", "ending_balance": 510000},
+          {"month": "Jan-2024", "ending_balance": 550000},
+          {"month": "Dec-2023", "ending_balance": 625000},
+          {"month": "Nov-2023", "ending_balance": 575000},
+          {"month": "Oct-2023", "ending_balance": 530000},
+          {"month": "Sep-2023", "ending_balance": 490000},
+          {"month": "Aug-2023", "ending_balance": 525000},
+          {"month": "Jul-2023", "ending_balance": 560000},
+          {"month": "Jun-2023", "ending_balance": 530000},
+          {"month": "May-2023", "ending_balance": 505000}
+        ],
+        "payment_patterns": {
+          "average_days_to_pay": 58,
+          "payment_delays_count": 7,
+          "maximum_delay_days": 25
+        },
+        "cashflow_stability": {
+          "variance": 2850000000,
+          "trend": "Declining with high volatility"
+        }
+      },
+      "trade_references": [
+        {
+          "company": "Supplier X",
+          "relationship_years": 8,
+          "credit_limit": 120000,
+          "payment_terms": 45,
+          "payment_history": "Fair, frequent delays"
+        },
+        {
+          "company": "Supplier Y",
+          "relationship_years": 5,
+          "credit_limit": 90000,
+          "payment_terms": 30,
+          "payment_history": "Good, occasional delays"
+        }
+      ]
+    },
+    {
+      "buyer_id": "BUY1003",
+      "buyer_name": "Innovative Systems",
+      "industry": "Manufacturing",
+      "years_in_business": 5,
+      "requested_credit_limit": 100000,
+      "requested_payment_terms": 30,
+      "financials": {
+        "2023": {
+          "income_statement": {
+            "revenue": 2100000,
+            "cost_of_goods_sold": 1155000,
+            "gross_profit": 945000,
+            "operating_expenses": 685000,
+            "operating_income": 260000,
+            "interest_expense": 35000,
+            "income_before_tax": 225000,
+            "tax_expense": 67500,
+            "net_income": 157500
+          },
+          "balance_sheet": {
+            "assets": {
+              "current_assets": {
+                "cash": 325000,
+                "accounts_receivable": 275000,
+                "inventory": 190000,
+                "other_current_assets": 60000,
+                "total_current_assets": 850000
+              },
+              "non_current_assets": {
+                "property_plant_equipment": 950000,
+                "intangible_assets": 375000,
+                "other_non_current_assets": 125000,
+                "total_non_current_assets": 1450000
+              },
+              "total_assets": 2300000
+            },
+            "liabilities": {
+              "current_liabilities": {
+                "accounts_payable": 195000,
+                "short_term_debt": 125000,
+                "other_current_liabilities": 130000,
+                "total_current_liabilities": 450000
+              },
+              "non_current_liabilities": {
+                "long_term_debt": 450000,
+                "other_non_current_liabilities": 50000,
+                "total_non_current_liabilities": 500000
+              },
+              "total_liabilities": 950000
+            },
+            "equity": {
+              "common_stock": 1000000,
+              "retained_earnings": 350000,
+              "total_equity": 1350000
+            }
+          },
+          "cash_flow": {
+            "operating_activities": {
+              "net_income": 157500,
+              "depreciation_amortization": 85000,
+              "changes_in_working_capital": -45000,
+              "net_cash_from_operating": 197500
+            },
+            "investing_activities": {
+              "capital_expenditures": -150000,
+              "other_investing_activities": -75000,
+              "net_cash_from_investing": -225000
+            },
+            "financing_activities": {
+              "debt_repayment": -75000,
+              "dividends_paid": -35000,
+              "net_cash_from_financing": -110000
+            },
+            "net_change_in_cash": -137500
+          }
+        },
+        "2024": {
+          "income_statement": {
+            "revenue": 2600000,
+            "cost_of_goods_sold": 1430000,
+            "gross_profit": 1170000,
+            "operating_expenses": 820000,
+            "operating_income": 350000,
+            "interest_expense": 40000,
+            "income_before_tax": 310000,
+            "tax_expense": 93000,
+            "net_income": 217000
+          },
+          "balance_sheet": {
+            "assets": {
+              "current_assets": {
+                "cash": 390000,
+                "accounts_receivable": 320000,
+                "inventory": 220000,
+                "other_current_assets": 70000,
+                "total_current_assets": 1000000
+              },
+              "non_current_assets": {
+                "property_plant_equipment": 1100000,
+                "intangible_assets": 420000,
+                "other_non_current_assets": 140000,
+                "total_non_current_assets": 1660000
+              },
+              "total_assets": 2660000
+            },
+            "liabilities": {
+              "current_liabilities": {
+                "accounts_payable": 210000,
+                "short_term_debt": 130000,
+                "other_current_liabilities": 140000,
+                "total_current_liabilities": 480000
+              },
+              "non_current_liabilities": {
+                "long_term_debt": 400000,
+                "other_non_current_liabilities": 45000,
+                "total_non_current_liabilities": 445000
+              },
+              "total_liabilities": 925000
+            },
+            "equity": {
+              "common_stock": 1000000,
+              "retained_earnings": 735000,
+              "total_equity": 1735000
+            }
+          },
+          "cash_flow": {
+            "operating_activities": {
+              "net_income": 217000,
+              "depreciation_amortization": 95000,
+              "changes_in_working_capital": -60000,
+              "net_cash_from_operating": 252000
+            },
+            "investing_activities": {
+              "capital_expenditures": -200000,
+              "other_investing_activities": -60000,
+              "net_cash_from_investing": -260000
+            },
+            "financing_activities": {
+              "debt_repayment": -90000,
+              "dividends_paid": -50000,
+              "net_cash_from_financing": -140000
+            },
+            "net_change_in_cash": -148000
+          }
+        }
+      },
+      "bank_statements": {
+        "monthly_balances": [
+          {"month": "Apr-2024", "ending_balance": 390000},
+          {"month": "Mar-2024", "ending_balance": 370000},
+          {"month": "Feb-2024", "ending_balance": 350000},
+          {"month": "Jan-2024", "ending_balance": 375000},
+          {"month": "Dec-2023", "ending_balance": 395000},
+          {"month": "Nov-2023", "ending_balance": 365000},
+          {"month": "Oct-2023", "ending_balance": 345000},
+          {"month": "Sep-2023", "ending_balance": 335000},
+          {"month": "Aug-2023", "ending_balance": 325000},
+          {"month": "Jul-2023", "ending_balance": 340000},
+          {"month": "Jun-2023", "ending_balance": 330000},
+          {"month": "May-2023", "ending_balance": 320000}
+        ],
+        "payment_patterns": {
+          "average_days_to_pay": 28,
+          "payment_delays_count": 1,
+          "maximum_delay_days": 5
+        },
+        "cashflow_stability": {
+          "variance": 525000000,
+          "trend": "Growing steadily"
+        }
+      },
+      "trade_references": [
+        {
+          "company": "Supplier P",
+          "relationship_years": 4,
+          "credit_limit": 80000,
+          "payment_terms": 30,
+          "payment_history": "Excellent, always on time"
+        },
+        {
+          "company": "Supplier Q",
+          "relationship_years": 3,
+          "credit_limit": 60000,
+          "payment_terms": 30,
+          "payment_history": "Very good, rare delays"
+        }
+      ]
+    }
+  ]
+}
