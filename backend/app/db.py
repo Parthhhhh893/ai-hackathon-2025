@@ -8,11 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Fetch the necessary DB environment variables
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-DB_PORT = os.getenv("DB_PORT", "5432")  # Default to 5432 if not set
+POSTGRES_USER = "postgres"
+POSTGRES_PASSWORD = "Parth"
+POSTGRES_DB = "ai_hackathon"
+POSTGRES_HOST ="localhost"
+DB_PORT = "5433"
 
 # Build the SQLAlchemy database URL dynamically
 SQLALCHEMY_DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{DB_PORT}/{POSTGRES_DB}"

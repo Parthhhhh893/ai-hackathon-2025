@@ -242,19 +242,19 @@ def _calculate_credit_limit(data, rules, pass_percentage):
 if __name__ == "__main__":
     # Sample data
     fetched_data_points = {
-        "is_30_plus_dpd": True,
-        "is_60_plus_dpd": False,
-        "is_90_plus_dpd": False,
-        "adverse_remarks_present": False,
-        "unsecured_credit_enquiries_90_days": 0,
-        "unsecured_loans_disbursed_3_months": 0,
-        "debt_gt_one_year": True,
-        "turnover_dip_percent_change": 50,
-        "last_12_month_sales_in_rs": "1500000",
-        "debt_to_turnover_ratio": "3",
-        "business_vintage": "5",
-        "applicant_age": "30",
-        "proprietor_age": "40"
+        "is_30_plus_dpd": False,  # No days past due > 30
+        "is_60_plus_dpd": False,  # No days past due > 60
+        "is_90_plus_dpd": False,  # No days past due > 90
+        "adverse_remarks_present": False,  # No adverse remarks
+        "unsecured_credit_enquiries_90_days": 0,  # No recent credit enquiries
+        "unsecured_loans_disbursed_3_months": 0,  # No recent loans
+        "debt_gt_one_year": False,  # No long-term debt
+        "turnover_dip_percent_change": 20,  # Low turnover dip (better than the 75% threshold)
+        "last_12_month_sales_in_rs": "2500000",  # Higher sales than required
+        "debt_to_turnover_ratio": "1.5",  # Better ratio than required
+        "business_vintage": "4",  # Business established longer than required
+        "applicant_age": "35",  # Older than required
+        "proprietor_age": "45"  # Older than required
     }
 
     defined_rules = {
