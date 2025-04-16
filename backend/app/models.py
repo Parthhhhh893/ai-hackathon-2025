@@ -1,7 +1,7 @@
 import pytz
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import (
-    Column, Integer, String, Boolean, TIMESTAMP, Text, JSON, Enum as SQLAlchemyEnum, Float, func
+    Column, Integer, String, Boolean, TIMESTAMP, Text, JSON, Enum as SQLAlchemyEnum, Float, func, DateTime
 )
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -52,6 +52,7 @@ class Business(DefaultTimeStamp):
     business_sector = Column(String(255), nullable=False)
     risk_score = Column(String(255), nullable=False)
     risk_response = Column(JSON, nullable=True)
+    response_computed_on = Column(DateTime, nullable=True)
 
 
 class DocumentData(DefaultTimeStamp):
@@ -61,4 +62,13 @@ class DocumentData(DefaultTimeStamp):
     type = Column(String(255), nullable=False)
     raw_response = Column(JSON, nullable=True)
     business_id = Column(Integer)
+
+
+class FeatureFlag(DefaultTimeStamp):
+    __tablename__ = "feature_flags"
+
+    id = Column(Integer, primary_key=True, unique=True,autoincrement=True)
+    name = Column(String, index=True, unique=True, nullable=False)
+    is_enabled = Column(Boolean, default=True, nullable=False)
+    config = Column(JSON, nullable=True)  # Stores additional settings as JSON
 

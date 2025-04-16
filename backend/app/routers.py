@@ -70,15 +70,16 @@ async def upload_financial_docs(
         """
 
     # Send the CIBIL text to the OpenAI API
-    # cibil_response = openai.ChatCompletion.create(
-    #     model="gpt-3.5-turbo",
-    #     messages=[{"role": "user", "content": cibil_prompt}],
-    #     temperature=0.3,
-    # )
-    #
-    # if cibil_response:
-    #     cibil_data = cibil_response['choices'][0]['message']['content']
-    #     final_data = cibil_data
+    cibil_response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": cibil_prompt}],
+        temperature=0.3,
+    )
+
+    if cibil_response:
+        cibil_data = cibil_response['choices'][0]['message']['content']
+        final_data = cibil_data
+
 
     gst_prompt = f"""
         **GST SNIPPET**:
@@ -102,8 +103,11 @@ async def upload_financial_docs(
     if gst_response:
         gst_data = gst_response['choices'][0]['message']['content']
         # final_data.update({'gst':gst_data})
-
-    return {"result": json.loads(gst_data)}
+    print("final_data------------------------------------------", final_data)
+    print("gst_data------------------------------------------", gst_data)
+    return {"cibil_response": json.loads(final_data),
+            "gst_response":json.loads(gst_data)
+            }
 
 
 
