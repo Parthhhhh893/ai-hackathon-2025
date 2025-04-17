@@ -32,14 +32,14 @@ async def upload_financial_docs(
         rules: str = Form(...),
         db: Session = Depends(get_db)
 ):
-    print("request received")
-    # try:
-    #     rules_dict = json.loads(rules)
-    # except json.JSONDecodeError:
-    #     return JSONResponse(
-    #         content={"error": "Invalid JSON string"},
-    #         status_code=400
-    #     )
+    try:
+        rules_dict = json.loads(rules)
+    except json.JSONDecodeError:
+        return JSONResponse(
+            content={"error": "Invalid JSON string"},
+            status_code=400
+        )
+
     # Create Business entry
     business_data = {
         'business_name': company_name,
@@ -101,7 +101,8 @@ async def upload_financial_docs(
     )
     if cibil_response:
         cibil_data = cibil_response['choices'][0]['message']['content']
-        print("type from gpt response for cibil--------------",type(cibil_data))
+
+
     gst_prompt = f"""
         **GST SNIPPET**:
         {gst_text}
@@ -122,11 +123,13 @@ async def upload_financial_docs(
 
     if gst_response:
         gst_data = gst_response['choices'][0]['message']['content']
+
     document_data = {
         'type': "GST",
-        'raw_response': json.loads(json.dumps(gst_data)),
+        'raw_response': json.loads(gst_data),
         'business_id': business_object.id
     }
+
     gst_data = json.loads(gst_data)
     create_model_entry(db, document_data, DocumentData)
     clean_cibil_data = cibil_data.strip().strip('```json').strip('```')
@@ -134,14 +137,17 @@ async def upload_financial_docs(
     cibil_data_dict = json.loads(clean_cibil_data)
     fetched_data_points = cibil_data_dict.copy()
     fetched_data_points.update(gst_data)  # Merge gst_data into fetched_data_points
-    rules = {"is_30_plus_dpd": False,"is_60_plus_dpd": False,"is_90_plus_dpd": False,"adverse_remarks_present": False,"unsecured_credit_enquiries_90_days": 0,"unsecured_loans_disbursed_3_months": 0,"debt_gt_one_year": False,"turnover_dip_percent_change": 75,"last_12_month_sales_in_rs": "1000000","debt_to_turnover_ratio": "2","business_vintage": "2","applicant_age": "25","proprietor_age": "35"}
-    risk_response = predict_risk_score_based_on_rule_engine(fetched_data_points, rules, strict=True)
+    # rules = {"is_30_plus_dpd": False,"is_60_plus_dpd": False,"is_90_plus_dpd": False,
+    #          "adverse_remarks_present": False,
+    #          "unsecured_credit_enquiries_90_days": 0,
+    #          "unsecured_loans_disbursed_3_months": 0,
+    #          "debt_gt_one_year": False,"turnover_dip_percent_change": 75,"last_12_month_sales_in_rs": "1000000","debt_to_turnover_ratio": "2","business_vintage": "2","applicant_age": "25","proprietor_age": "35"}
+    risk_response = predict_risk_score_based_on_rule_engine(fetched_data_points, rules_dict, strict=True)
     # risk_response = predict_risk_score_based_on_rule_engine(fetched_data_points, parsed, strict=True)
-    print(f"risk_response----------------------------, {type(risk_response)}")
 
     document_data = {
         'type': "CIBIL",
-        'raw_response': cibil_data,
+        'raw_response': json.loads(clean_cibil_data),
         'business_id': business_object.id
     }
     create_model_entry(db, document_data, DocumentData)
