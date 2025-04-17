@@ -1,4 +1,6 @@
 import io
+import logging
+
 import simplejson as json
 
 import openai
@@ -167,9 +169,9 @@ async def upload_financial_docs(
     db.commit()
 
     return {
-            'business_name': business_object.business_name,
-            'risk_response': risk_response
-        }
+        'business_name': business_object.business_name,
+        'risk_response': risk_response
+    }
 
 
 @backend_routers.get("/fetch/logs")
