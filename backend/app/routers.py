@@ -41,94 +41,21 @@ async def upload_financial_docs(
             content={"error": "Invalid JSON string"},
             status_code=400
         )
-    # rules_dict ={
-    #         "business_name": "ABC",
-    #         "risk_response": {
-    #             "verdict": "REJECTED",
-    #             "credit_limit": None,
-    #             "reason": "Failed 13/13 criteria in strict mode.",
-    #             "criteria": {
-    #                 "is_30_plus_dpd": {
-    #                     "expected": False,
-    #                     "actual": True,
-    #                     "result": "Fail",
-    #                     "remark": "Is 30 Plus Dpd status doesn't meet requirements"
-    #                 },
-    #                 "is_60_plus_dpd": {
-    #                     "expected": False,
-    #                     "actual": True,
-    #                     "result": "Fail",
-    #                     "remark": "Is 60 Plus Dpd status doesn't meet requirements"
-    #                 },
-    #                 "is_90_plus_dpd": {
-    #                     "expected": False,
-    #                     "actual": True,
-    #                     "result": "Fail",
-    #                     "remark": "Is 90 Plus Dpd status doesn't meet requirements"
-    #                 },
-    #                 "adverse_remarks_present": {
-    #                     "expected": False,
-    #                     "actual": True,
-    #                     "result": "Fail",
-    #                     "remark": "Adverse Remarks Present status doesn't meet requirements"
-    #                 },
-    #                 "unsecured_credit_enquiries_90_days": {
-    #                     "expected": 0,
-    #                     "actual": 4,
-    #                     "result": "Fail",
-    #                     "remark": "Unsecured Credit Enquiries 90 Days count exceeds limits"
-    #                 },
-    #                 "unsecured_loans_disbursed_3_months": {
-    #                     "expected": 0,
-    #                     "actual": 2,
-    #                     "result": "Fail",
-    #                     "remark": "Unsecured Loans Disbursed 3 Months count exceeds limits"
-    #                 },
-    #                 "debt_gt_one_year": {
-    #                     "expected": False,
-    #                     "actual": True,
-    #                     "result": "Fail",
-    #                     "remark": "Debt Gt One Year status doesn't meet requirements"
-    #                 },
-    #                 "turnover_dip_percent_change": {
-    #                     "expected": 75,
-    #                     "actual": "Not available",
-    #                     "result": "Fail",
-    #                     "remark": "Data point not available"
-    #                 },
-    #                 "last_12_month_sales_in_rs": {
-    #                     "expected": 1000000,
-    #                     "actual": "Not available",
-    #                     "result": "Fail",
-    #                     "remark": "Data point not available"
-    #                 },
-    #                 "debt_to_turnover_ratio": {
-    #                     "expected": 2.0,
-    #                     "actual": "Not available",
-    #                     "result": "Fail",
-    #                     "remark": "Data point not available"
-    #                 },
-    #                 "business_vintage": {
-    #                     "expected": 2,
-    #                     "actual": "Not available",
-    #                     "result": "Fail",
-    #                     "remark": "Data point not available"
-    #                 },
-    #                 "applicant_age": {
-    #                     "expected": 25,
-    #                     "actual": "Not available",
-    #                     "result": "Fail",
-    #                     "remark": "Data point not available"
-    #                 },
-    #                 "proprietor_age": {
-    #                     "expected": 35,
-    #                     "actual": "Not available",
-    #                     "result": "Fail",
-    #                     "remark": "Data point not available"
-    #                 }
-    #             }
-    #         }
-    #     }
+    # rules_dict={
+    #     "is_30_plus_dpd": False,
+    #     "is_60_plus_dpd": False,
+    #     "is_90_plus_dpd": False,
+    #     "adverse_remarks_present": False,
+    #     "unsecured_credit_enquiries_90_days": 0,
+    #     "unsecured_loans_disbursed_3_months": 0,
+    #     "debt_gt_one_year": False,
+    #     "turnover_dip_percent_change": 75,
+    #     "last_12_month_sales_in_rs": "1000000",
+    #     "debt_to_turnover_ratio": "2",
+    #     "business_vintage": "2",
+    #     "applicant_age": "25",
+    #     "proprietor_age": "35"
+    # }
 
     used_business = (
         db.query(Business)
@@ -205,18 +132,29 @@ async def upload_financial_docs(
     if cibil_response:
         cibil_data = cibil_response['choices'][0]['message']['content']
 
-
     gst_prompt = f"""
-        **GST SNIPPET**:
-        {gst_text}
-        You are an expert at analyzing financial reports. Given a GST sales report, extract and calculate the following data points:
-        1. Turnover DIP Acceptance: Is there a drop or increase in recent 12-month sales compared to the previous 12-months? Mention the percentage change and whether it's acceptable.
-        2. Debt to Turnover: If total debt is provided, calculate debt/turnover ratio using the recent 12-month sales.
-        3. Last 12 Month Sales: Mention the total taxable value for the last 12 months.
-        4. Anchor Dependency: If customer-level sales data is available, calculate the percentage of total sales from the top customer(s).
-        5. Vintage with Anchor: Determine how long the business has been transacting with its key anchor customer.
-        Use accurate formulas and context from the data file. Return the result in structured JSON format.
-        """
+    **GST SNIPPET**:
+    {gst_text}
+    You are an expert at analyzing financial reports. Given a GST sales report, extract and calculate the following data points:
+    1. Turnover DIP Acceptance: Is there a drop or increase in recent 12-month sales compared to the previous 12-months? Mention the percentage change and whether it's acceptable.
+    2. Debt to Turnover: If total debt is provided, calculate debt/turnover ratio using the recent 12-month sales.
+    3. Last 12 Month Sales: Mention the total taxable value for the last 12 months.
+    4. Anchor Dependency: If customer-level sales data is available, calculate the percentage of total sales from the top customer(s).
+    5. Vintage with Anchor: Determine how long the business has been transacting with its key anchor customer.
+    Use accurate formulas and context from the data file. Return the result in structured JSON format.
+    Please always give response in this format:
+    This is the sample response format I expect:
+            {{
+      "Turnover DIP Acceptance": {{
+        "Percentage Change": "182%",
+        "Acceptable": "Yes"
+      }},
+      "Debt to Turnover Ratio": "27.89%",
+      "Last 12 Month Sales": "₹ 60,987,301.20",
+      "Anchor Dependency": "N/A",
+      "Vintage with Anchor": "N/A"
+    }}
+    """
 
     gst_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -242,12 +180,16 @@ async def upload_financial_docs(
         'debt_to_turnover_ratio': float(debt_to_turnover_ratio.replace('%', '').strip()),
         'business_vintage': business_vintage,
         'applicant_age': co_applicant_age,
-        'proprietor_age': proprietor_age,
-        'last_12_month_sales_in_rs': float(last_12_month_sales.replace('₹', '').replace(',', '').strip()),
-        'turnover_dip_percent_change': float(
-            turnover_dip_percent_change.replace('%', '').strip())
+        'proprietor_age': proprietor_age
     }
-    print("turnover_dip_percent_change-------------",turnover_dip_percent_change)
+    print(f"turnover_dip_percent_change----------------",turnover_dip_percent_change)
+    print(f"last_12_month_sales_in_rs----------------",last_12_month_sales)
+    if turnover_dip_percent_change:
+        gst_data['turnover_dip_percent_change'] = float(
+            turnover_dip_percent_change.replace('%', '').strip())
+    if last_12_month_sales:
+        gst_data['last_12_month_sales_in_rs'] = float(last_12_month_sales.replace('₹', '').replace(',', '').strip())
+    print(f"Gst data---------------------{gst_data}",)
     create_model_entry(db, document_data, DocumentData)
     clean_cibil_data = cibil_data.strip().strip('```json').strip('```')
     # Parse the cleaned string into a dictionary
