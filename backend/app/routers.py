@@ -131,6 +131,16 @@ async def upload_financial_docs(
     }
 
     gst_data = json.loads(gst_data)
+    gst_data = {
+        'debt_to_turnover_ratio': float(gst_data['Debt to Turnover Ratio'].replace('%', '').strip()),
+        'business_vintage': business_vintage,
+        'applicant_age': co_applicant_age,
+        'proprietor_age': proprietor_age,
+        'last_12_month_sales_in_rs': float(gst_data['Last 12 Month Sales'].replace('₹', '').replace(',', '').strip()),
+        'turnover_dip_percent_change': float(
+            gst_data['Turnover DIP Acceptance']['Percentage Change'].replace('%', '').strip())
+    }
+
     create_model_entry(db, document_data, DocumentData)
     clean_cibil_data = cibil_data.strip().strip('```json').strip('```')
     # Parse the cleaned string into a dictionary
