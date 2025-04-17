@@ -10,7 +10,7 @@ from starlette.responses import JSONResponse
 
 from backend.app.crud.db_crud_operations import fetch_model_entries, create_model_entry
 from backend.app.db import get_db
-from backend.app.models import Business, DocumentData
+from backend.app.models import Business, DocumentData, Rule
 from backend.app.utils.rule_engine_utils import predict_risk_score_based_on_rule_engine
 
 openai.api_key = (
@@ -173,4 +173,49 @@ async def fetch_logs(
         response_list.append(response_data)
     return {
         "response": response_list
+    }
+
+
+@backend_routers.get("/fetch/default")
+async def fetch_default(
+        db: Session = Depends(get_db)
+):
+    rule  =  fetch_model_entries(
+        filter_data={
+            'is_enabled': True
+        },
+        db=db,
+        model=Rule,
+        fetch_one=True
+    )
+    return {
+        "response": rule.rule_config
+    }
+
+# TODO: fetching rule from input string, to be fetched as dictionary
+from fastapi import Request
+@backend_routers.post("/update/default")
+async def fetch_logs(
+        request: Request,db: Session = Depends(get_db)
+
+):
+    rule_config = request.rule_config
+
+    rule  =  fetch_model_entries(
+        filter_data={
+            'is_enabled': True
+        },
+        db=db,
+        model=Rule
+    )
+    rule.is_enabled = False
+    rule_data = {
+        'rule_config': rule_config,
+        'is_enabled': True
+    }
+    create_model_entry(db, rule_data, Rule)
+    db.add(rule)
+    db.commit()
+    return {
+        "response": rule.rule_config
     }
