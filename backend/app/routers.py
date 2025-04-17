@@ -129,6 +129,20 @@ async def upload_financial_docs(
     #             }
     #         }
     #     }
+
+    used_business = (
+        db.query(Business)
+        .filter(Business.name.ilike(f"%{company_name}%"))
+        .first()
+    )
+
+    if used_business:
+        logging.info(f"Fetched from database cache for company:{company_name}")
+        return {
+            'business_name': used_business.business_name,
+            'risk_response': used_business.risk_response
+        }
+
     # Create Business entry
     business_data = {
         'business_name': company_name,
@@ -220,7 +234,6 @@ async def upload_financial_docs(
     }
 
     gst_data = json.loads(gst_data)
-    print("gst_data from CHATGPT----------------", gst_data)
     debt_to_turnover_ratio = gst_data.get('Debt_to_Turnover_Ratio') or gst_data.get('Debt to Turnover Ratio')
     last_12_month_sales = gst_data.get('Last_12_Month_Sales_Total_Taxable_Value') or gst_data.get('Last 12 Month Sales')
     turnover_dip_percent_change_config = gst_data.get('Turnover_DIP_Acceptance') or gst_data.get('Turnover DIP Acceptance')
