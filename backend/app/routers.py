@@ -1,10 +1,17 @@
 import io
-import json
+import simplejson as json
 
 import openai
 from PyPDF2 import PdfReader
 from fastapi import (APIRouter, UploadFile, Form,
-                     File)
+                     File, Depends)
+from sqlalchemy.orm import Session
+from starlette.responses import JSONResponse
+
+from backend.app.crud.db_crud_operations import fetch_model_entries, create_model_entry
+from backend.app.db import get_db
+from backend.app.models import Business, DocumentData
+from backend.app.utils.rule_engine_utils import predict_risk_score_based_on_rule_engine
 
 openai.api_key = (
     "sk-proj-yML_w4bVd34rEH1DHfSLpZzUIpAdC4hcFpj9YenGs-x-08ZuoMRlN5SOpqCwCvMu6wwn-TJTc5T3BlbkFJDaRppjEuqtQr"
@@ -21,9 +28,25 @@ async def upload_financial_docs(
         co_applicant_age: int = Form(...),
         proprietor_age: int = Form(...),
         company_name: str = Form(...),
-        rules: str = Form(...)
-        # db: AsyncSession = Depends(get_db)
+        rules: str = Form(...),
+        db: Session = Depends(get_db)
 ):
+    # try:
+    #     rules_dict = json.loads(rules)
+    # except json.JSONDecodeError:
+    #     return JSONResponse(
+    #         content={"error": "Invalid JSON string"},
+    #         status_code=400
+    #     )
+    # Create Business entry
+    business_data = {
+        'business_name': company_name,
+        'business_sector': "IT",
+        'risk_score': "Not evaluated"
+    }
+    business_object= create_model_entry(db, business_data, Business)
+
+
     cibil_data = await cibil_file.read()
     gst_data = await gst_file.read()
 
@@ -68,7 +91,7 @@ async def upload_financial_docs(
         6."unsecured_number_of_loans_in_last_3_months": <integer>,
         7."debt_gt_one_year": true/false
         """
-
+    print("fetching cibil response")
     # Send the CIBIL text to the OpenAI API
     cibil_response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -78,9 +101,13 @@ async def upload_financial_docs(
 
     if cibil_response:
         cibil_data = cibil_response['choices'][0]['message']['content']
-        final_data = cibil_data
-
-
+    document_data = {
+        'type': "CIBIL",
+        'raw_response': json.loads(json.dumps(cibil_data)),
+        'business_id': business_object.id
+    }
+    cibil_data = json.loads(cibil_data)
+    create_model_entry(db, document_data, DocumentData)
     gst_prompt = f"""
         **GST SNIPPET**:
         {gst_text}
@@ -102,13 +129,43 @@ async def upload_financial_docs(
 
     if gst_response:
         gst_data = gst_response['choices'][0]['message']['content']
-        # final_data.update({'gst':gst_data})
-    print("final_data------------------------------------------", final_data)
-    print("gst_data------------------------------------------", gst_data)
-    return {"cibil_response": json.loads(final_data),
-            "gst_response":json.loads(gst_data)
-            }
+        print(f"gst data type---{type(gst_data)}-------------{gst_data}")
+    document_data = {
+        'type': "GST",
+        'raw_response': json.loads(json.dumps(gst_data)),
+        'business_id': business_object.id
+    }
+    gst_data = json.loads(gst_data)
+    create_model_entry(db, document_data, DocumentData)
+    fetched_data_points = cibil_data
+    fetched_data_points.update(gst_data)
+    risk_response = predict_risk_score_based_on_rule_engine(fetched_data_points, rules, strict=True)
+    print("risk_response----------------------------", risk_response)
+    # risk_response = predict_risk_score_based_on_rule_engine(fetched_data_points, rules_dict, strict=True)
+    business_object.risk_response = json.dumps(json.loads(risk_response))
+    db.add(business_object)
+    db.commit()
+    return {
+            'business_name': business_object.business_name,
+            'risk_response': json.loads(business_object.risk_response)
+        }
 
 
-
-
+@backend_routers.post("/fetch/logs")
+async def fetch_logs(
+        db: Session = Depends(get_db)
+):
+    business_list  =  fetch_model_entries(
+        db=db,
+        model=Business
+    )
+    response_list = []
+    for business_object in business_list:
+        response_data = {
+            'business_name': business_object.business_name,
+            'risk_response': json.loads(business_object.risk_response)
+        }
+        response_list.append(response_data)
+    return {
+        "response": response_list
+    }

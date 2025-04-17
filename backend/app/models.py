@@ -49,8 +49,8 @@ class Business(DefaultTimeStamp):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     business_name = Column(String(255), nullable=False)
-    business_sector = Column(String(255), nullable=False)
-    risk_score = Column(String(255), nullable=False)
+    business_sector = Column(String(255), nullable=True)
+    risk_score = Column(String(255), nullable=True)
     risk_response = Column(JSON, nullable=True)
     response_computed_on = Column(DateTime, nullable=True)
 
