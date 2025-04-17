@@ -132,7 +132,7 @@ async def upload_financial_docs(
 
     used_business = (
         db.query(Business)
-        .filter(Business.name.ilike(f"%{company_name}%"))
+        .filter(Business.business_name.ilike(f"%{company_name}%"))
         .first()
     )
 
