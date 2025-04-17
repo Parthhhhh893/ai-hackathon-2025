@@ -27,7 +27,7 @@ export const TabNavigation = ({ activeTab, setActiveTab }) => {
           onClick={() => setActiveTab(tab.id)}
           className={`flex items-center py-3 px-6 ${
             activeTab === tab.id
-              ? "border-b-2 border-blue-500 text-blue-600 font-medium"
+              ? "border-b-2 border-[#4F46E5] text-[#4F46E5] font-medium"
               : "text-gray-500 hover:text-blue-500"
           }`}
         >

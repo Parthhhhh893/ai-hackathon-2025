@@ -1,5 +1,11 @@
-export const LogsTable = ({ logs, handleResultClick }) => {
-  return (
+import { loader } from "./iconSvg";
+
+export const LogsTable = ({ logs, handleResultClick, loading }) => {
+  return loading ? (
+    <div className="w-full h-full flex justify-center items-center p-20">
+      <div className="p-15">{loader()}</div>
+    </div>
+  ) : (
     <div>
       <h2 className="text-xl font-semibold mb-4">Business Reports</h2>
       <div className="overflow-x-auto">
@@ -11,7 +17,7 @@ export const LogsTable = ({ logs, handleResultClick }) => {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => {
+            {logs?.map((log) => {
               const verdictColor =
                 log.risk_response?.verdict === "APPROVED"
                   ? "text-green-600"

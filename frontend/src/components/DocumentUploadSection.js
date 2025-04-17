@@ -4,7 +4,7 @@ export const DocumentUploadSection = ({ businessData, setBusinessData }) => {
   const onUpload = (key, file) => {
     setBusinessData({ ...businessData, [key]: file });
   };
-  console.log(businessData);
+
   return (
     <div className="border-b pb-6">
       <h3 className="text-lg font-medium mb-4">Upload Documents</h3>

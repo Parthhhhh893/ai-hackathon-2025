@@ -1,22 +1,11 @@
 import React, { useState } from "react";
+import apiCall from "../network/Api";
 
-export default function ThresholdSection({ isSetting = false }) {
-  const [formData, setFormData] = useState({
-    is_30_plus_dpd: false,
-    is_60_plus_dpd: false,
-    is_90_plus_dpd: false,
-    adverse_remarks_present: false,
-    unsecured_credit_enquiries_90_days: 0,
-    unsecured_loans_disbursed_3_months: 0,
-    debt_gt_one_year: false,
-    turnover_dip_percent_change: 0,
-    last_12_month_sales_in_rs: "",
-    debt_to_turnover_ratio: "",
-    business_vintage: "",
-    applicant_age: "",
-    proprietor_age: "",
-  });
-
+export default function ThresholdSection({
+  isSetting = false,
+  formData,
+  setFormData,
+}) {
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
     setFormData((prev) => ({
@@ -25,15 +14,25 @@ export default function ThresholdSection({ isSetting = false }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Config:", formData);
+    try {
+      const result = await apiCall({
+        endpoint: "/upload/documents",
+        method: "POST",
+        data: { ...formData },
+        params: null,
+      }).then((res) => {
+        setFormData(res?.data);
+      });
+      return result;
+    } catch (err) {}
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-6 max-w-2xl mx-auto grid gap-4 bg-white rounded-2xl shadow"
+      className="p-6  mx-auto grid gap-4 bg-white rounded-2xl shadow"
     >
       <h2 className="text-lg font-medium">CIBIL Configs</h2>
 
@@ -150,7 +149,7 @@ export default function ThresholdSection({ isSetting = false }) {
       {isSetting && (
         <button
           type="submit"
-          className="mt-4 bg-blue-600 text-white py-2 px-4 rounded-xl"
+          className="mt-4 bg-[#4F46E5] text-white py-2 px-4 rounded-xl"
         >
           Submit Config
         </button>

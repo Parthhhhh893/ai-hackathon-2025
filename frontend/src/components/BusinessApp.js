@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BusinessDetailsForm } from "./BusinessDetailsForm";
 import { LogsTable } from "./LogsTable";
 import { SettingsPanel } from "./SettingsPanel";
 import { TabNavigation } from "./TabNavigation";
 import Loader from "./Loader";
 import ResultDetailsPage from "./ResultDetailPage";
+import apiCall from "../network/Api";
 
 export default function BusinessApp() {
   const [activeTab, setActiveTab] = useState("logs");
@@ -27,9 +28,7 @@ export default function BusinessApp() {
     applicant_age: "",
     proprietor_age: "",
   });
-
-  // Sample log data
-  const verdict = {
+  const [verdict, setVerdict] = useState({
     business_name: "Business",
     risk_response: {
       verdict: "REJECTED",
@@ -116,30 +115,84 @@ export default function BusinessApp() {
         },
       },
     },
+  });
+  const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getReports = async () => {
+    setLoading(true);
+    try {
+      const result = await apiCall({
+        endpoint: "/fetch/logs",
+        method: "GET",
+        data: null,
+        params: null,
+      }).then((res) => {
+        setLogs(res?.response);
+        setLoading(false);
+      });
+      return result;
+    } catch (err) {}
   };
-  const logs = [verdict, verdict, verdict];
+
+  useEffect(() => {
+    if (activeTab === "logs") getReports();
+  }, [activeTab]);
 
   const handleResultClick = (type, data) => {
     setCurrentView(type);
-    setViewData(data);
+    setVerdict(data);
   };
 
   const handleBackClick = () => {
     setCurrentView("main");
-    setViewData(null);
-  };
-
-  const updateDefaultThreshold = () => {
-    setDefaultThreshold(threshold);
-    alert("Default threshold updated successfully!");
+    setActiveTab("logs");
+    setVerdict(null);
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-blue-600 text-white p-4">
-        <div className="container mx-auto">
-          <h1 className="text-2xl font-bold">Business Assessment Portal</h1>
+      <header class="flex items-center justify-between px-6 py-4 bg-white shadow-md">
+        <div class="flex items-center space-x-2">
+          <svg
+            width="160"
+            height="50"
+            viewBox="0 0 200 60"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <text
+              x="0"
+              y="40"
+              font-family="Segoe UI, sans-serif"
+              font-size="36"
+              font-weight="600"
+              fill="#1A1A1A"
+            >
+              Cred
+            </text>
+            <text
+              x="92"
+              y="40"
+              font-family="Segoe UI, sans-serif"
+              font-size="36"
+              font-weight="800"
+              letter-spacing="-2"
+              fill="#4F46E5"
+            >
+              X
+            </text>
+            <text
+              x="124"
+              y="40"
+              font-family="Segoe UI, sans-serif"
+              font-size="36"
+              font-weight="600"
+              fill="#4F46E5"
+            >
+              B
+            </text>
+          </svg>
         </div>
       </header>
 
@@ -153,7 +206,11 @@ export default function BusinessApp() {
             {/* Tab Content */}
             <div className="bg-white p-6 rounded-lg shadow">
               {activeTab === "logs" && (
-                <LogsTable logs={logs} handleResultClick={handleResultClick} />
+                <LogsTable
+                  logs={logs}
+                  handleResultClick={handleResultClick}
+                  loading={loading}
+                />
               )}
 
               {activeTab === "business" && (
@@ -165,6 +222,7 @@ export default function BusinessApp() {
                   thresholdConfig={thresholdConfig}
                   updateThresholdConfig={setThresholdConfig}
                   setCurrentView={setCurrentView}
+                  setVerdict={setVerdict}
                 />
               )}
 
@@ -182,7 +240,7 @@ export default function BusinessApp() {
           </>
         ) : (
           <div className="bg-white p-6 rounded-lg shadow">
-            {currentView === "result" && viewData && (
+            {currentView === "result" && verdict && (
               <ResultDetailsPage
                 data={verdict}
                 handleBackClick={handleBackClick}

@@ -1,6 +1,5 @@
 import axios from "axios";
 // Base URL for your API
-import { API_URL } from "./config";
 
 /**
  * Generic API call function
@@ -18,9 +17,10 @@ const apiCall = async ({
   params = {},
   headers = {},
 }) => {
+  const API_URL = "https://poor-cars-behave.loca.lt/";
   const defaultHeaders = {
     "Content-Type": "application/json", // Default content type
-    "api-token": localStorage.getItem("token"),
+    "bypass-tunnel-reminder": "true",
   };
 
   const config = {

@@ -24,9 +24,8 @@ const FileUpload = ({ onUpload, label }) => {
       setError("");
       setSelectedFile(file);
 
-      // const formData = new FormData();
-      // formData.append("file", file); // Use "file" or whatever your API expects
-      // console.log(formData);
+      const formData = new FormData();
+      formData.append("file", file); // Use "file" or whatever your API expects
       // Optional callback to handle upload outside
       onUpload(file);
     }
@@ -49,7 +48,7 @@ const FileUpload = ({ onUpload, label }) => {
         </p>
         <button
           type="button"
-          className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          className="mt-3 px-4 py-2 bg-[#4F46E5] text-white rounded-md hover:bg-blue-700"
           onClick={handleBrowseClick}
         >
           Browse Files

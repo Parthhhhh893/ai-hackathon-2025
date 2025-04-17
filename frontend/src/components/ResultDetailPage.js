@@ -46,19 +46,23 @@ export default function ResultDetailPage({ data, handleBackClick }) {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(criteria).map(([key, value]) => (
-                <tr key={key} className="border-t border-gray-200">
-                  <td className="p-3 font-medium capitalize">
-                    {key.replace(/_/g, " ")}
-                  </td>
-                  <td className="p-3">{String(value.expected)}</td>
-                  <td className="p-3">{String(value.actual)}</td>
-                  <td className="p-3 font-semibold text-green-600">
-                    {value.result}
-                  </td>
-                  <td className="p-3 text-gray-700">{value.remark}</td>
-                </tr>
-              ))}
+              {Object.entries(criteria).map(([key, value]) => {
+                const resultColor =
+                  value?.result === "Pass" ? "text-green-600" : "text-red-600";
+                return (
+                  <tr key={key} className="border-t border-gray-200">
+                    <td className="p-3 font-medium capitalize">
+                      {key.replace(/_/g, " ")}
+                    </td>
+                    <td className="p-3">{String(value.expected)}</td>
+                    <td className="p-3">{String(value.actual)}</td>
+                    <td className={`p-3 font-semibold ${resultColor}`}>
+                      {value.result}
+                    </td>
+                    <td className="p-3 text-gray-700">{value.remark}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
