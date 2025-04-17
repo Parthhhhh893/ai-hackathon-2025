@@ -41,7 +41,94 @@ async def upload_financial_docs(
             content={"error": "Invalid JSON string"},
             status_code=400
         )
-
+    # rules_dict ={
+    #         "business_name": "ABC",
+    #         "risk_response": {
+    #             "verdict": "REJECTED",
+    #             "credit_limit": None,
+    #             "reason": "Failed 13/13 criteria in strict mode.",
+    #             "criteria": {
+    #                 "is_30_plus_dpd": {
+    #                     "expected": False,
+    #                     "actual": True,
+    #                     "result": "Fail",
+    #                     "remark": "Is 30 Plus Dpd status doesn't meet requirements"
+    #                 },
+    #                 "is_60_plus_dpd": {
+    #                     "expected": False,
+    #                     "actual": True,
+    #                     "result": "Fail",
+    #                     "remark": "Is 60 Plus Dpd status doesn't meet requirements"
+    #                 },
+    #                 "is_90_plus_dpd": {
+    #                     "expected": False,
+    #                     "actual": True,
+    #                     "result": "Fail",
+    #                     "remark": "Is 90 Plus Dpd status doesn't meet requirements"
+    #                 },
+    #                 "adverse_remarks_present": {
+    #                     "expected": False,
+    #                     "actual": True,
+    #                     "result": "Fail",
+    #                     "remark": "Adverse Remarks Present status doesn't meet requirements"
+    #                 },
+    #                 "unsecured_credit_enquiries_90_days": {
+    #                     "expected": 0,
+    #                     "actual": 4,
+    #                     "result": "Fail",
+    #                     "remark": "Unsecured Credit Enquiries 90 Days count exceeds limits"
+    #                 },
+    #                 "unsecured_loans_disbursed_3_months": {
+    #                     "expected": 0,
+    #                     "actual": 2,
+    #                     "result": "Fail",
+    #                     "remark": "Unsecured Loans Disbursed 3 Months count exceeds limits"
+    #                 },
+    #                 "debt_gt_one_year": {
+    #                     "expected": False,
+    #                     "actual": True,
+    #                     "result": "Fail",
+    #                     "remark": "Debt Gt One Year status doesn't meet requirements"
+    #                 },
+    #                 "turnover_dip_percent_change": {
+    #                     "expected": 75,
+    #                     "actual": "Not available",
+    #                     "result": "Fail",
+    #                     "remark": "Data point not available"
+    #                 },
+    #                 "last_12_month_sales_in_rs": {
+    #                     "expected": 1000000,
+    #                     "actual": "Not available",
+    #                     "result": "Fail",
+    #                     "remark": "Data point not available"
+    #                 },
+    #                 "debt_to_turnover_ratio": {
+    #                     "expected": 2.0,
+    #                     "actual": "Not available",
+    #                     "result": "Fail",
+    #                     "remark": "Data point not available"
+    #                 },
+    #                 "business_vintage": {
+    #                     "expected": 2,
+    #                     "actual": "Not available",
+    #                     "result": "Fail",
+    #                     "remark": "Data point not available"
+    #                 },
+    #                 "applicant_age": {
+    #                     "expected": 25,
+    #                     "actual": "Not available",
+    #                     "result": "Fail",
+    #                     "remark": "Data point not available"
+    #                 },
+    #                 "proprietor_age": {
+    #                     "expected": 35,
+    #                     "actual": "Not available",
+    #                     "result": "Fail",
+    #                     "remark": "Data point not available"
+    #                 }
+    #             }
+    #         }
+    #     }
     # Create Business entry
     business_data = {
         'business_name': company_name,
@@ -133,16 +220,21 @@ async def upload_financial_docs(
     }
 
     gst_data = json.loads(gst_data)
+    print("gst_data from CHATGPT----------------", gst_data)
+    debt_to_turnover_ratio = gst_data.get('Debt_to_Turnover_Ratio') or gst_data.get('Debt to Turnover Ratio')
+    last_12_month_sales = gst_data.get('Last_12_Month_Sales_Total_Taxable_Value') or gst_data.get('Last 12 Month Sales')
+    turnover_dip_percent_change_config = gst_data.get('Turnover_DIP_Acceptance') or gst_data.get('Turnover DIP Acceptance')
+    turnover_dip_percent_change = turnover_dip_percent_change_config.get('Percentage_Change') or turnover_dip_percent_change_config.get('Percentage Change')
     gst_data = {
-        'debt_to_turnover_ratio': float(gst_data['Debt to Turnover Ratio'].replace('%', '').strip()),
+        'debt_to_turnover_ratio': float(debt_to_turnover_ratio.replace('%', '').strip()),
         'business_vintage': business_vintage,
         'applicant_age': co_applicant_age,
         'proprietor_age': proprietor_age,
-        'last_12_month_sales_in_rs': float(gst_data['Last 12 Month Sales'].replace('₹', '').replace(',', '').strip()),
+        'last_12_month_sales_in_rs': float(last_12_month_sales.replace('₹', '').replace(',', '').strip()),
         'turnover_dip_percent_change': float(
-            gst_data['Turnover DIP Acceptance']['Percentage Change'].replace('%', '').strip())
+            turnover_dip_percent_change.replace('%', '').strip())
     }
-
+    print("turnover_dip_percent_change-------------",turnover_dip_percent_change)
     create_model_entry(db, document_data, DocumentData)
     clean_cibil_data = cibil_data.strip().strip('```json').strip('```')
     # Parse the cleaned string into a dictionary
@@ -163,7 +255,6 @@ async def upload_financial_docs(
         'business_id': business_object.id
     }
     create_model_entry(db, document_data, DocumentData)
-    # risk_response = predict_risk_score_based_on_rule_engine(fetched_data_points, rules_dict, strict=True)
     business_object.risk_response = risk_response
     db.add(business_object)
     db.commit()
